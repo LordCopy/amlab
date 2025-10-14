@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Operations</title>
+    <style>
+        /* --- General Styling --- */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* --- Main Container --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        /* --- Navigation Buttons --- */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            background-color: #003d82;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1c1e21;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        /* --- Section Styling --- */
+        .assignment-section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 30px 20px;
+            background-color: #fafafa;
+            scroll-margin-top: 20px;
+        }
+
+        .assignment-section h2 {
+            margin-top: 0;
+import numpy as np
+        }
+
+        /* --- Code Block Styling --- */
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: "Fira Code", "Courier New", monospace;
+            font-size: 0.9em;
+            position: relative;
+            margin: 0;
+        }
+
+        /* --- Copy Button Styling --- */
+        .copy-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .copy-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Output Styling --- */
+        .output {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-family: "Courier New", monospace;
+            font-weight: bold;
+        }
+
+        .output strong {
+            color: #495057;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Python Assignments</h1>
+
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="window.location.href='#assignment1'">1.py - Matrix Operations</button>
+            <button class="nav-btn" onclick="window.location.href='#assignment2'">2.py - Eigenvalues</button>
+            <button class="nav-btn" onclick="window.location.href='#assignment3'">3.py - Linear System</button>
+            <button class="nav-btn" onclick="window.location.href='#assignment4'">4.py - Distributions</button>
+        </div>
+
+        <div class="assignment-section" id="assignment1">
+            <h2>Assignment 1: Matrix Operations (1.py)</h2>
+            <pre><code class="language-py">a = [[7, 3], [2, 8]]
+b = [[4, 6], [9, 2]]
+scalar = 7
+
+def add(x, y):
+    result = [[0 for _ in range(len(x[0]))] for _ in range(len(x))]
+    for i in range(len(x)):
+        for j in range(len(x[0])):
+            result[i][j] = x[i][j] + y[i][j]
+    return result
+
+def mul(A, B):
+    result = []
+    for i in range(len(A)):
+        row = []
+        for j in range(len(B[0])):
+            sum = 0
+            for k in range(len(A[0])):
+                sum += A[i][k] * B[k][j]
+            row.append(sum)
+        result.append(row)
+    return result
+
+def scalar_mul(matrix, scalar):
+    result = []
+    for i in range(len(matrix)):
+        row = [matrix[i][j] * scalar for j in range(len(matrix[0]))]
+        result.append(row)
+    return result
+
+print("Addition:", add(a, b))
+print("Multiplication:", mul(a, b))
+print("Scalar A:", scalar_mul(a, scalar))
+print("Scalar B:", scalar_mul(b, scalar))
+
+
+
+import numpy as np
+
+a = np.array([[7, 3],
+              [2, 8]])
+
+b = np.array([[4, 6],
+              [9, 2]])
+
+scalar = 7
+
+add_result = a + b
+mul_result = np.dot(a, b)    
+scalar_a = scalar * a
+scalar_b = scalar * b
+print("Addition:\n", add_result)
+print("\nMultiplication:\n", mul_result)
+print(f"\nScalar multiplication of A with {scalar}:\n", scalar_a)
+print(f"\nScalar multiplication of B with {scalar}:\n", scalar_b)</code></pre>
+            <button class="copy-btn">Copy Code</button>
+            <div class="output"><strong>Note:</strong> This shows the contents of <code>1.py</code>. <span id="output1"></span></div>
+        </div>
+
+        <div class="assignment-section" id="assignment2">
+            <h2>Assignment 2: Eigenvalues and Eigenvectors (2.py)</h2>
+            <pre><code class="language-py">import numpy as np
+
+# Step 1: Define 2x2 matrix
+A = np.array([[4, 1],
+              [2, 3]])
+
+print("Matrix A:")
+print(A)
+
+# Step 2: Compute eigenvalues manually
+# For 2x2 matrix [[a, b], [c, d]]:
+# Characteristic equation: |A - λI| = 0 → λ² - (a+d)λ + (ad - bc) = 0
+
+a, b = A[0, 0], A[0, 1]
+c, d = A[1, 0], A[1, 1]
+
+trace = a + d
+det = a * d - b * c
+
+# Solve quadratic equation for eigenvalues
+lambda1 = (trace + np.sqrt(trace**2 - 4 * det)) / 2
+lambda2 = (trace - np.sqrt(trace**2 - 4 * det)) / 2
+
+print("\nEigenvalues:")
+print(lambda1, lambda2)
+
+# Step 3: Compute eigenvectors manually
+# Solve (A - λI)v = 0
+# For 2x2: (a - λ)v1 + b*v2 = 0 → v2 = -((a - λ)/b) * v1
+
+def eigenvector(A, lam):
+    a, b = A[0, 0], A[0, 1]
+    c, d = A[1, 0], A[1, 1]
+
+    if b != 0:
+        v1 = 1
+        v2 = -((a - lam) / b) * v1
+    elif c != 0:
+        v2 = 1
+        v1 = -((d - lam) / c) * v2
+    else:  # diagonal matrix
+        v1, v2 = 1, 0
+
+    vec = np.array([v1, v2])
+    return vec / np.linalg.norm(vec)  # normalize the vector
+
+v1 = eigenvector(A, lambda1)
+v2 = eigenvector(A, lambda2)
+
+print("\nEigenvectors (normalized):")
+print("v1 =", v1)
+print("v2 =", v2)
+
+# Step 4: Diagonalization
+P = np.column_stack((v1, v2))  # matrix of eigenvectors
+D = np.diag([lambda1, lambda2])  # diagonal matrix of eigenvalues
+P_inv = np.linalg.inv(P)
+
+A_diag = P @ D @ P_inv
+
+print("\nDiagonal matrix D:")
+print(D)</code></pre>
+            <button class="copy-btn">Copy Code</button>
+            <div class="output"><strong>Note:</strong> This shows the contents of <code>2.py</code>. <span id="output2"></span></div>
+        </div>
+
+        <div class="assignment-section" id="assignment3">
+            <h2>Assignment 3: Linear System Solver (3.py)</h2>
+            <pre><code class="language-py"># Step 1: Define the system of equations
+# A is the coefficient matrix, B is the constants vector
+
+A = [
+    [1, 1, 1],
+    [2, 3, 1],
+    [1, 2, 3]
+]
+B = [6, 14, 14]
+n = len(B)  # Number of equations/variables
+
+# Step 2: Forward Elimination
+# Convert A into an upper triangular matrix
+for i in range(n):  # Loop over each pivot row
+    for k in range(i + 1, n):  # Loop over rows below pivot
+        factor = A[k][i]  # Multiplier to eliminate element in column i
+        for j in range(n):  # Loop over columns
+            A[k][j] -= factor * A[i][j]  # Subtract pivot row * factor
+        B[k] -= factor * B[i]  # Update corresponding element in B
+
+print("Matrix A after forward elimination (upper triangular):")
+print(A)
+print("Modified B after forward elimination:")
+print(B)
+
+# Step 3: Back Substitution
+# Solve for variables starting from the last row
+
+x = [0] * n  # Initialize solution vector
+
+for i in range(n - 1, -1, -1):  # Start from last row
+    ax = 0
+    for j in range(i + 1, n):  # Sum of known variables * coefficients
+        ax += A[i][j] * x[j]
+    x[i] = (B[i] - ax) / A[i][i]  # Solve for current variable
+
+# Step 4: Print the solution
+print("Solution vector [x, y, z]:")
+print(x)</code></pre>
+            <button class="copy-btn">Copy Code</button>
+            <div class="output"><strong>Note:</strong> This shows the contents of <code>3.py</code>. <span id="output3"></span></div>
+        </div>
+
+        <div class="assignment-section" id="assignment4">
+            <h2>Assignment 4: Probability Distributions (4.py)</h2>
+            <pre><code class="language-py">import numpy as np
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+
+# 1. BINOMIAL DISTRIBUTION
+
+# Number of trials
+n = 10
+# Probability of success (here 0.25*2 = 0.5)
+p = 0.25 * 2
+
+# Possible values for number of successes (0, 1, ..., n)
+x_bino = np.arange(0, n + 1)
+
+# Probability Mass Function (PMF) for binomial distribution
+pmf_bino = stats.binom.pmf(x_bino, n, p)
+
+# 2. NORMAL DISTRIBUTION
+
+# Mean (μ) and Standard Deviation (σ)
+mu = 0
+sigma = 1
+
+# Generate x values in range [-4, 4]
+x_norm = np.linspace(-4, 4, 100)
+
+# Probability Density Function (PDF) for normal distribution
+pmf_norm = stats.norm.pdf(x_norm, mu, sigma)
+
+# 3. PLOTTING
+
+plt.figure(figsize=(12, 5))  # Create figure with 2 plots
+
+# Binomial Distribution (Discrete)
+plt.subplot(1, 2, 1)
+plt.stem(x_bino, pmf_bino, basefmt=" ")
+plt.title("Binomial Distribution (n=10, p=0.5)")
+plt.xlabel("Number of Successes")
+plt.ylabel("Probability")
+plt.grid(True)
+
+# Normal Distribution (Continuous)
+plt.subplot(1, 2, 2)
+plt.plot(x_norm, pmf_norm, color="red")
+plt.title("Normal Distribution (μ=0, σ=1)")
+plt.xlabel("Value")
+plt.ylabel("Probability Density")
+plt.grid(True)
+
+# Adjust layout so plots don't overlap
+plt.tight_layout()
+plt.show()</code></pre>
+            <button class="copy-btn">Copy Code</button>
+            <div class="output"><strong>Note:</strong> This shows the contents of <code>4.py</code>. <span id="output4"></span></div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Initial Data ---
+            const a = [[7, 3], [2, 8]];
+            const b = [[4, 6], [9, 2]];
+            const scalar = 7;
+
+            // --- Helper to format matrix output ---
+            const formatMatrix = (matrix) => JSON.stringify(matrix).replace(/\],\[/g, '], [');
+
+            // --- Assignment 1: Addition ---
+            function add(x, y) {
+                const result = [];
+                for (let i = 0; i < x.length; i++) {
+                    const row = [];
+                    for (let j = 0; j < x[0].length; j++) {
+                        row.push(x[i][j] + y[i][j]);
+                    }
+                    result.push(row);
+                }
+                return result;
+            }
+            document.getElementById('output1').textContent = formatMatrix(add(a, b));
+
+            // --- Assignment 2: Multiplication ---
+            function mul(A, B) {
+                const result = [];
+                for (let i = 0; i < A.length; i++) {
+                    const row = [];
+                    for (let j = 0; j < B[0].length; j++) {
+                        let sum = 0;
+                        for (let k = 0; k < A[0].length; k++) {
+                            sum += A[i][k] * B[k][j];
+                        }
+                        row.push(sum);
+                    }
+                    result.push(row);
+                }
+                return result;
+            }
+            document.getElementById('output2').textContent = formatMatrix(mul(a, b));
+
+            // --- Assignments 3 & 4: Scalar Multiplication ---
+            function scalar_mul(matrix, scalar) {
+                const result = [];
+                for (let i = 0; i < matrix.length; i++) {
+                    const row = [];
+                    for (let j = 0; j < matrix[i].length; j++) {
+                        row.push(matrix[i][j] * scalar);
+                    }
+                    result.push(row);
+                }
+                return result;
+            }
+            document.getElementById('output3').textContent = formatMatrix(scalar_mul(a, scalar));
+            document.getElementById('output4').textContent = formatMatrix(scalar_mul(b, scalar));
+
+
+            // --- Copy Button Functionality ---
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const codeBlock = button.previousElementSibling.querySelector('code');
+                    navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+                        const originalText = button.textContent;
+                        button.textContent = 'Copied!';
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
