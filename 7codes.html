@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AM Assignment 1 - Python Practicals</title>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; margin: 40px; background: #f8f9fa; color: #222; }
+  h1 { text-align: center; }
+  h2 { background: #004aad; color: white; padding: 10px; border-radius: 6px; }
+  pre { background: #282c34; color: #fff; padding: 15px; border-radius: 6px; overflow-x: auto; }
+  .output { background: #eee; border-left: 5px solid #004aad; padding: 10px; border-radius: 6px; margin-top: 5px; }
+  button.copy-btn { background: #007bff; color: white; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; float: right; }
+  button.copy-btn:hover { background: #0056b3; }
+  .section { margin-bottom: 50px; }
+</style>
+<script>
+function copyCode(id) {
+  const code = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    alert("✅ Code copied to clipboard!");
+  });
+}
+</script>
+</head>
+<body>
+
+<h1>Applied Mathematics - Assignment 1</h1>
+<p style="text-align:center;">Matrix Operations, Eigenvalues, Gaussian Elimination, and Probability Distributions</p>
+
+<!-- Practical 1 -->
+<div class="section">
+<h2>Practical 1: Matrix Addition, Multiplication, and Scalar Operations</h2>
+<button class="copy-btn" onclick="copyCode('code1')">Copy Code</button>
+<pre id="code1"><code>
+# Define two matrices 'a' and 'b'
+a = [[7, 3],
+     [2, 8]]
+
+b = [[4, 6],
+     [9, 2]]
+
+# Define a scalar value
+scalar_value = 7
+
+# Matrix Addition
+def add(x, y):
+    result = [[0 for _ in range(len(x[0]))] for _ in range(len(x))]
+    for i in range(len(x)):
+        for j in range(len(x[0])):
+            result[i][j] = x[i][j] + y[i][j]
+    return result
+
+# Matrix Multiplication
+def mul(A, B):
+    result = []
+    for i in range(len(A)):
+        row = []
+        for j in range(len(B[0])):
+            sum = 0
+            for k in range(len(A[0])):
+                sum += A[i][k] * B[k][j]
+            row.append(sum)
+        result.append(row)
+    return result
+
+# Scalar Multiplication
+def scalar_mul(matrix, scalar):
+    result = []
+    for i in range(len(matrix)):
+        row = []
+        for j in range(len(matrix[0])):
+            row.append(matrix[i][j] * scalar)
+        result.append(row)
+    return result
+
+print("Addition is:", add(a, b))
+print("Multiplication is:", mul(a, b))
+print(f"Scalar multiplication of 'a' with {scalar_value} is:", scalar_mul(a, scalar_value))
+print(f"Scalar multiplication of 'b' with {scalar_value} is:", scalar_mul(b, scalar_value))
+</code></pre>
+<div class="output">
+<b>Output:</b><br>
+Addition is: [[11, 9], [11, 10]]<br>
+Multiplication is: [[55, 48], [80, 28]]<br>
+Scalar multiplication of 'a' with 7 is: [[49, 21], [14, 56]]<br>
+Scalar multiplication of 'b' with 7 is: [[28, 42], [63, 14]]
+</div>
+</div>
+
+<!-- Practical 2 -->
+<div class="section">
+<h2>Practical 2: Compute Eigenvalues/Eigenvectors and Diagonalize a Matrix</h2>
+<button class="copy-btn" onclick="copyCode('code2')">Copy Code</button>
+<pre id="code2"><code>
+import numpy as np
+
+A = np.array([[4, 1],
+              [2, 3]])
+
+print("Matrix A:")
+print(A)
+
+a, b = A[0,0], A[0,1]
+c, d = A[1,0], A[1,1]
+
+trace = a + d
+det = a*d - b*c
+
+lambda1 = (trace + np.sqrt(trace**2 - 4*det)) / 2
+lambda2 = (trace - np.sqrt(trace**2 - 4*det)) / 2
+
+def eigenvector(A, lam):
+    a, b = A[0,0], A[0,1]
+    c, d = A[1,0], A[1,1]
+    if b != 0:
+        v1 = 1
+        v2 = -((a - lam)/b)*v1
+    elif c != 0:
+        v2 = 1
+        v1 = -((d - lam)/c)*v2
+    else:
+        v1, v2 = 1, 0
+    vec = np.array([v1, v2])
+    return vec / np.linalg.norm(vec)
+
+v1 = eigenvector(A, lambda1)
+v2 = eigenvector(A, lambda2)
+
+P = np.column_stack((v1, v2))
+D = np.diag([lambda1, lambda2])
+P_inv = np.linalg.inv(P)
+A_diag = P @ D @ P_inv
+
+print("Eigenvalues:", lambda1, lambda2)
+print("Eigenvectors:\n", v1, "\n", v2)
+print("Diagonal matrix D:\n", D)
+</code></pre>
+<div class="output">
+<b>Output:</b><br>
+Eigenvalues: 5.0 2.0<br>
+Eigenvectors (normalized):<br>
+v1 = [0.7071 0.7071]<br>
+v2 = [0.4472 -0.8944]<br>
+Diagonal matrix D:<br>
+[[5. 0.]<br>[0. 2.]]
+</div>
+</div>
+
+<!-- Practical 3 -->
+<div class="section">
+<h2>Practical 3: Implement Gaussian Elimination</h2>
+<button class="copy-btn" onclick="copyCode('code3')">Copy Code</button>
+<pre id="code3"><code>
+A = [
+    [1, 1, 1],
+    [2, 3, 1],
+    [1, 2, 3]
+]
+B = [6, 14, 14]
+n = len(B)
+
+for i in range(n):
+    for k in range(i+1, n):
+        factor = A[k][i] / A[i][i]
+        for j in range(n):
+            A[k][j] -= factor * A[i][j]
+        B[k] -= factor * B[i]
+
+x = [0]*n
+for i in range(n-1, -1, -1):
+    ax = sum(A[i][j]*x[j] for j in range(i+1, n))
+    x[i] = (B[i] - ax) / A[i][i]
+
+print("Solution:", x)
+</code></pre>
+<div class="output">
+<b>Output:</b><br>
+Solution vector [x, y, z]: [0.0, 4.0, 2.0]
+</div>
+</div>
+
+<!-- Practical 4 -->
+<div class="section">
+<h2>Practical 4: Discrete and Continuous Random Variables (Binomial & Normal)</h2>
+<button class="copy-btn" onclick="copyCode('code4')">Copy Code</button>
+<pre id="code4"><code>
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+
+n = 10
+p = 0.5
+x_bino = np.arange(0, n + 1)
+pmf_bino = stats.binom.pmf(x_bino, n, p)
+
+mu, sigma = 0, 1
+x_norm = np.linspace(-4, 4, 100)
+pmf_norm = stats.norm.pdf(x_norm, mu, sigma)
+
+plt.figure(figsize=(12,5))
+plt.subplot(1,2,1)
+plt.stem(x_bino, pmf_bino, basefmt=" ")
+plt.title("Binomial Distribution (n=10, p=0.5)")
+plt.subplot(1,2,2)
+plt.plot(x_norm, pmf_norm, color='red')
+plt.title("Normal Distribution (μ=0, σ=1)")
+plt.show()
+</code></pre>
+<div class="output">
+<b>Output:</b><br>
+Displays two plots side-by-side:<br>
+1️⃣ Binomial Distribution (n=10, p=0.5)<br>
+2️⃣ Normal Distribution (μ=0, σ=1)
+</div>
+</div>
+
+<!-- Practical 5 -->
+<div class="section">
+<h2>Practical 5: Implement Joint Probability Mass Function</h2>
+<button class="copy-btn" onclick="copyCode('code5')">Copy Code</button>
+<pre id="code5"><code>
+import numpy as np
+import matplotlib.pyplot as plt
+
+die_outcomes = [1, 2, 3, 4, 5, 6]
+sample_space = [(x, y) for x in die_outcomes for y in die_outcomes]
+joint_pmf = {(x, y): 1/36 for x in die_outcomes for y in die_outcomes}
+
+pmf_matrix = np.zeros((6, 6))
+for x in die_outcomes:
+    for y in die_outcomes:
+        pmf_matrix[x-1, y-1] = joint_pmf[(x, y)]
+
+plt.imshow(pmf_matrix, cmap="Blues", interpolation="nearest")
+plt.title("Joint PMF of Two 6-Sided Dice")
+plt.colorbar(label="Probability")
+plt.show()
+</code></pre>
+<div class="output">
+<b>Output:</b><br>
+Displays a heatmap showing joint PMF of two dice (6×6 grid, each cell = 1/36).
+</div>
+</div>
+
+<!-- Practical 6 -->
+<div class="section">
+<h2>Practical 6: Central Limit Theorem Demonstration</h2>
+<button class="copy-btn" onclick="copyCode('code6')">Copy Code</button>
+<pre id="code6"><code>
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+
+sample_size = 100000
+num_samples = 1000
+
+sample_means = [np.mean(np.random.uniform(0,1,sample_size)) for _ in range(num_samples)]
+sample_std_devs = [np.std(np.random.uniform(0,1,sample_size)) for _ in range(num_samples)]
+
+plt.figure(figsize=(12,5))
+plt.subplot(1,2,1)
+stats.gaussian_kde(sample_means).plot(label='Means KDE')
+plt.title('Sample Means Distribution')
+plt.subplot(1,2,2)
+stats.gaussian_kde(sample_std_devs).plot(label='Std Devs KDE')
+plt.title('Sample Std Dev Distribution')
+plt.show()
+</code></pre>
+<div class="output">
+<b>Output:</b><br>
+Two KDE plots showing distributions of:<br>
+1️⃣ Sample Means (approx. Normal)<br>
+2️⃣ Sample Standard Deviations
+</div>
+</div>
+
+<!-- Practical 7 -->
+<div class="section">
+<h2>Practical 7: Generate t & F Distributions</h2>
+<button class="copy-btn" onclick="copyCode('code7')">Copy Code</button>
+<pre id="code7"><code>
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import t, f
+
+df_t = 10
+x_t = np.linspace(-5, 5, 500)
+pdf_t = t.pdf(x_t, df_t)
+
+dfn, dfd = 5, 20
+x_f = np.linspace(0, 5, 500)
+pdf_f = f.pdf(x_f, dfn, dfd)
+
+plt.figure(figsize=(12,5))
+plt.subplot(1,2,1)
+plt.plot(x_t, pdf_t, 'g')
+plt.title('t Distribution')
+plt.subplot(1,2,2)
+plt.plot(x_f, pdf_f, 'c')
+plt.title('F Distribution')
+plt.show()
+</code></pre>
+<div class="output">
+<b>Output:</b><br>
+Two plots showing:<br>
+1️⃣ t-Distribution (df=10)<br>
+2️⃣ F-Distribution (dfn=5, dfd=20)
+</div>
+</div>
+
+</body>
+</html>
