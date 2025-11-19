@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Applied Mathematics Practicals — Download & Copy</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; padding: 24px; background:#f7f7f7 }
+    h1 { margin-bottom: 8px }
+    table { border-collapse: collapse; width: 100%; background: white }
+    th, td { padding: 12px 10px; border-bottom: 1px solid #e0e0e0; text-align: left }
+    th { background: #fafafa }
+    button { padding: 6px 10px; border: 1px solid #bbb; background: #fff; cursor: pointer; border-radius:4px }
+    button.primary { background: #1976d2; color: #fff; border-color:#1976d2 }
+    button:active { transform: translateY(1px) }
+    .note { margin-top:10px; color:#444 }
+    .msg { position: fixed; right: 20px; bottom: 20px; background: #323232; color: #fff; padding: 10px 14px; border-radius: 6px; display:none }
+  </style>
+</head>
+<body>
+  <h1>Applied Mathematics Practicals</h1>
+  <p class="note">Click <strong>Download</strong> to download the raw file from GitHub; click <strong>Copy</strong> to copy the code to clipboard (code is not displayed on this page).</p>
+
+  <table id="practicals-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Practical Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="msg" id="msg"></div>
+
+  <script>
+    // Configure your GitHub repo details here
+    const GITHUB_USER = 'LordCopy';
+    const GITHUB_REPO = 'amlab';
+    const GITHUB_BRANCH = 'main';
+    const BASE_PATH = 'Codes'; // path inside the repo where files live
+
+    // List of practicals: number, display name, filename in the repo
+    const practicals = [
+      {n:1, name: 'Matrix operations', file: '1.py'},
+      {n:2, name: 'Eigenvalues & eigenvectors (2x2)', file: '2.py'},
+      {n:3, name: 'Gaussian elimination (solve system)', file: '3.py'},
+      {n:4, name: 'Binomial & Normal distributions (plot)', file: '4.py'},
+      {n:5, name: 'Joint PMF of two dice (heatmap)', file: '5.py'},
+      {n:6, name: 'Central Limit Theorem demo', file: '6.py'},
+      {n:7, name: 't and F distributions', file: '7.py'},
+      {n:8, name: 'Z-test for single mean', file: '8.py'},
+      {n:9, name: 'Markov n-step transition', file: '9.py'},
+      {n:10, name: 'Simple linear regression', file: '10.py'},
+      {n:11, name: 'Multiple linear regression', file: '11.py'},
+      {n:12, name: "Lagrange's interpolation", file: '12.py'},
+      {n:13, name: "Newton's interpolation", file: '13.py'}
+    ];
+
+    const tbody = document.querySelector('#practicals-table tbody');
+    const msgBox = document.getElementById('msg');
+
+    function showMsg(text, timeout=2500){
+      msgBox.textContent = text; msgBox.style.display = 'block';
+      clearTimeout(msgBox._t);
+      msgBox._t = setTimeout(()=> msgBox.style.display = 'none', timeout);
+    }
+
+    function rawUrlFor(filename){
+      // raw URL on GitHub
+      return `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${BASE_PATH}/${filename}`;
+    }
+
+    async function downloadFile(filename){
+      const url = rawUrlFor(filename);
+      try{
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        const blob = await res.blob();
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(objectUrl);
+        showMsg('Downloaded: ' + filename);
+      }catch(err){
+        showMsg('Download failed: ' + err.message);
+      }
+    }
+
+    async function copyFileToClipboard(filename){
+      const url = rawUrlFor(filename);
+      try{
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        const text = await res.text();
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          await navigator.clipboard.writeText(text);
+        } else {
+          // fallback
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta);
+          ta.select(); document.execCommand('copy'); ta.remove();
+        }
+        showMsg('Code copied to clipboard: ' + filename);
+      }catch(err){
+        showMsg('Copy failed: ' + err.message);
+      }
+    }
+
+    // Build table rows
+    practicals.forEach(p => {
+      const tr = document.createElement('tr');
+      const tdNo = document.createElement('td'); tdNo.textContent = p.n;
+      const tdName = document.createElement('td'); tdName.textContent = p.name;
+      const tdActions = document.createElement('td');
+
+      const dlBtn = document.createElement('button'); dlBtn.className='primary'; dlBtn.textContent='COPY RAW';
+      dlBtn.title = rawUrlFor(p.file);
+      dlBtn.addEventListener('click', ()=> downloadFile(p.file));
+
+      const cpBtn = document.createElement('button'); cpBtn.textContent='Copy';
+      cpBtn.style.marginLeft = '8px';
+      cpBtn.addEventListener('click', ()=> copyFileToClipboard(p.file));
+
+      tdActions.appendChild(dlBtn); tdActions.appendChild(cpBtn);
+
+      tr.appendChild(tdNo); tr.appendChild(tdName); tr.appendChild(tdActions);
+      tbody.appendChild(tr);
+    });
+
+  </script>
+</body>
+</html>
