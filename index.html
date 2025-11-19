@@ -69,7 +69,7 @@
 
     function rawUrlFor(filename){
       // raw URL on GitHub
-      return `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${BASE_PATH}/${filename}`;
+      return `https://raw.githubusercontent.com/LordCopy/amlab/refs/heads/main/${filename}`;
     }
 
     async function downloadFile(filename){
@@ -112,6 +112,23 @@
       }
     }
 
+    // Copy the raw file URL (do not download the file)
+    async function copyRawLink(filename){
+      const url = rawUrlFor(filename);
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          await navigator.clipboard.writeText(url);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = url; document.body.appendChild(ta);
+          ta.select(); document.execCommand('copy'); ta.remove();
+        }
+        showMsg('Raw URL copied to clipboard');
+      }catch(err){
+        showMsg('Copy URL failed: ' + err.message);
+      }
+    }
+
     // Build table rows
     practicals.forEach(p => {
       const tr = document.createElement('tr');
@@ -121,7 +138,7 @@
 
       const dlBtn = document.createElement('button'); dlBtn.className='primary'; dlBtn.textContent='COPY RAW';
       dlBtn.title = rawUrlFor(p.file);
-      dlBtn.addEventListener('click', ()=> downloadFile(p.file));
+      dlBtn.addEventListener('click', ()=> copyRawLink(p.file));
 
       const cpBtn = document.createElement('button'); cpBtn.textContent='Copy';
       cpBtn.style.marginLeft = '8px';
