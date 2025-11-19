@@ -19,7 +19,7 @@
 </head>
 <body>
   <h1>Applied Mathematics Practicals</h1>
-  <p class="note">Click <strong>Download</strong> to download the raw file from GitHub; click <strong>Copy</strong> to copy the code to clipboard (code is not displayed on this page).</p>
+  <p class="note">Click <strong>COPY RAW and paste it in JUPYTER and RUN it (code will automatically get pasted there)</strong>  click <strong>Copy</strong> to copy the code to clipboard (code is not displayed on this page).</p>
 
   <table id="practicals-table">
     <thead>
@@ -69,7 +69,7 @@
 
     function rawUrlFor(filename){
       // raw URL on GitHub
-      return `https://raw.githubusercontent.com/LordCopy/amlab/refs/heads/main/${filename}`;
+      return `%load https://raw.githubusercontent.com/LordCopy/amlab/refs/heads/main/${filename}`;
     }
 
     async function downloadFile(filename){
