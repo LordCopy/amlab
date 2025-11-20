@@ -1,36 +1,29 @@
-# Practical 3: Implement Gaussian Elimination from Scratch
+import numpy as np
 
-# Step 1: Define the system of equations
-A = [
-    [1, 1, 1],
-    [2, 3, 1],
-    [1, 2, 3]
-]
-B = [6, 14, 14]
+A = np.array([[1, 1, 1],
+              [2, 3, 1],
+              [1, 2, 3]], dtype=float)
 
+B = np.array([6, 14, 14], dtype=float)
 n = len(B)
 
-# Step 2: Forward Elimination
+# ---------- Forward Elimination ----------
 for i in range(n):
     for k in range(i+1, n):
         factor = A[k][i] / A[i][i]
-        for j in range(i, n):
-            A[k][j] -= factor * A[i][j]
-        B[k] -= factor * B[i]
+        A[k] = A[k] - factor * A[i]
+        B[k] = B[k] - factor * B[i]
 
-print("Matrix A after forward elimination (upper triangular):")
-for row in A:
-    print(row)
-print("Modified B after forward elimination:")
-print(B)
+print("Upper Triangular Matrix A:\n", A)
+print("Modified B:\n", B)
 
-# Step 3: Back Substitution
-x = [0] * n
-for i in range(n-1, -1, -1):
+# ---------- Backward Substitution ----------
+x = [0] * n  # Initialize solution vector
+for i in range(n-1, -1, -1):  # Start from last row, go upwards
     ax = 0
     for j in range(i+1, n):
-        ax += A[i][j] * x[j]
-    x[i] = (B[i] - ax) / A[i][i]
+        ax += A[i][j] * x[j]  # Sum known variables
+    x[i] = (B[i] - ax) / A[i][i]  # Solve for current variable
 
-print("Solution vector [x, y, z]:")
+print("\nSolution Vector [x, y, z]:")
 print(x)

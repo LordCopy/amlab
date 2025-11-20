@@ -1,43 +1,32 @@
 import numpy as np
 from scipy.stats import norm
 
-# Practical 8: Perform Large Sample Test for Single Mean (Z-test)
+# Sample data
+data = [52, 50, 53, 49, 48, 51, 54, 50, 52, 49]
 
-def z_test_single_mean(sample, mu0, sigma=None, alpha=0.05, alternative="two-sided"):
-    sample = np.array(sample)
-    n = len(sample)
-    x_bar = np.mean(sample)
-    
-    if sigma is None:
-        sigma = np.std(sample, ddof=1)
-    
-    # Compute Z-statistic
-    z_stat = (x_bar - mu0) / (sigma / np.sqrt(n))
-    
-    # Compute p-value based on test type
-    if alternative == "two-sided":
-        p_value = 2 * (1 - norm.cdf(abs(z_stat)))
-    elif alternative == "greater":
-        p_value = 1 - norm.cdf(z_stat)
-    elif alternative == "less":
-        p_value = norm.cdf(z_stat)
-    else:
-        raise ValueError("alternative must be 'two-sided', 'greater', or 'less'")
-    
-    reject = p_value <= alpha
-    
-    return {
-        "Sample Mean": x_bar,
-        "Hypothesized Mean": mu0,
-        "Z-statistic": z_stat,
-        "P-value": p_value,
-        "Conclusion": "Reject H₀" if reject else "Fail to Reject H₀"
-    }
+# Hypothesized mean
+mu0 = 50
 
-if __name__ == '__main__':
-    data = [52, 50, 53, 49, 48, 51, 54, 50, 52, 49]
-    mu0 = 50
-    alpha = 0.05
+# Step 1: Convert to array
+data = np.array(data)
 
-    result = z_test_single_mean(data, mu0, alpha=alpha, sigma=None, alternative='two-sided')
-    print(result)
+# Step 2: Compute sample mean, std dev, and n
+x_bar = np.mean(data)
+sigma = np.std(data, ddof=1)
+n = len(data)
+
+# Step 3: Compute Z-statistic
+z = (x_bar - mu0) / (sigma / np.sqrt(n))
+
+# Step 4: Compute p-value (two-tailed)
+p_value = 2 * (1 - norm.cdf(abs(z)))
+
+# Step 5: Print results
+print("Sample Mean:", x_bar)
+print("Z-statistic:", z)
+print("P-value:", p_value)
+
+if p_value < 0.05:
+    print("Conclusion: Reject H0")
+else:
+    print("Conclusion: Fail to Reject H0")

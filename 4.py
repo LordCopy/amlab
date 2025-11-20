@@ -2,42 +2,37 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
-# Practical 4: Discrete and Continuous Random Variables (Binomial and Normal Distributions)
+# 1. BINOMIAL DISTRIBUTION
+n = 10               # Number of trials
+p = 0.25 * 2         # Probability of success (0.5)
 
-def plot_distributions():
-    # 1. BINOMIAL DISTRIBUTION
-    n = 10
-    p = 0.25 * 2
-    x_bino = np.arange(0, n + 1)
-    pmf_bino = stats.binom.pmf(x_bino, n, p)
+x_bino = np.arange(0, n + 1)
+pmf_bino = stats.binom.pmf(x_bino, n, p)
 
-    # 2. NORMAL DISTRIBUTION
-    mu = 0
-    sigma = 1
-    x_norm = np.linspace(-4, 4, 100)
-    pmf_norm = stats.norm.pdf(x_norm, mu, sigma)
+# 2. NORMAL DISTRIBUTION
+mu = 0               # Mean
+sigma = 1            # Standard deviation
 
-    # 3. PLOTTING
-    plt.figure(figsize=(12, 5))
+x_norm = np.linspace(-4, 4, 100)
+pdf_norm = stats.norm.pdf(x_norm, mu, sigma)
 
-    # Binomial Distribution
-    plt.subplot(1, 2, 1)
-    plt.stem(x_bino, pmf_bino, basefmt=" ")
-    plt.title("Binomial Distribution (n=10, p=0.5)")
-    plt.xlabel("Number of Successes")
-    plt.ylabel("Probability")
-    plt.grid(True)
+# 3. PLOTTING
+plt.figure(figsize=(12, 5))
 
-    # Normal Distribution
-    plt.subplot(1, 2, 2)
-    plt.plot(x_norm, pmf_norm, color="red")
-    plt.title("Normal Distribution (μ=0, σ=1)")
-    plt.xlabel("Value")
-    plt.ylabel("Probability Density")
-    plt.grid(True)
+# Binomial Plot
+plt.subplot(1, 2, 1)
+plt.stem(x_bino, pmf_bino, basefmt=" ")
+plt.title("Binomial Distribution (n=10, p=0.5)")
+plt.xlabel("Number of Successes")
+plt.ylabel("Probability")
+plt.grid(True)
 
-    plt.tight_layout()
-    plt.show()
+# Normal Plot
+plt.subplot(1, 2, 2)
+plt.plot(x_norm, pdf_norm)
+plt.title("Normal Distribution (μ=0, σ=1)")
+plt.xlabel("Value")
+plt.ylabel("Probability Density")
+plt.grid(True)
 
-if __name__ == '__main__':
-    plot_distributions()
+plt.show()

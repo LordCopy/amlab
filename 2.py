@@ -1,48 +1,26 @@
 import numpy as np
 
-# Practical 2: Compute Eigenvalues/Eigenvectors and Diagonalize a Matrix
+# Define matrix A
+A = np.array([[4, 1],
+              [2, 3]])
 
-def eigen_manual(A):
-    # compute eigenvalues for 2x2 matrix A
-    a, b = A[0,0], A[0,1]
-    c, d = A[1,0], A[1,1]
+print("Matrix A:\n", A)
 
-    trace = a + d
-    det = a*d - b*c
+# Compute eigenvalues & eigenvectors
+eigenvalues, eigenvectors = np.linalg.eig(A)
 
-    lambda1 = (trace + np.sqrt(trace**2 - 4*det)) / 2
-    lambda2 = (trace - np.sqrt(trace**2 - 4*det)) / 2
+print("\nEigenvalues:")
+print(eigenvalues)
 
-    return lambda1, lambda2
+print("\nEigenvectors (columns represent vectors):")
+print(eigenvectors)
 
-def eigenvector(A, lam):
-    a, b = A[0,0], A[0,1]
-    c, d = A[1,0], A[1,1]
-    if b != 0:
-        v1 = 1
-        v2 = -((a - lam)/b)*v1
-    elif c != 0:
-        v2 = 1
-        v1 = -((d - lam)/c)*v2
-    else:
-        v1, v2 = 1, 0
+# Diagonalization
+D = np.diag(eigenvalues)        # diagonal matrix
+P = eigenvectors                # eigenvector matrix
+P_inv = np.linalg.inv(P)        # inverse of P
 
-    vec = np.array([v1, v2], dtype=float)
-    return vec / np.linalg.norm(vec)
+A_reconstructed = P @ D @ P_inv
 
-if __name__ == '__main__':
-    A = np.array([[4, 1],
-                  [2, 3]], dtype=float)
-
-    print("Matrix A:")
-    print(A)
-
-    lambda1, lambda2 = eigen_manual(A)
-    print("\nEigenvalues:")
-    print(lambda1, lambda2)
-
-    v1 = eigenvector(A, lambda1)
-    v2 = eigenvector(A, lambda2)
-    print("\nEigenvectors (normalized):")
-    print("v1 =", v1)
-    print("v2 =", v2)
+print("\nDiagonal Matrix D:\n", D)
+print("\nP * D * P^-1 (Should give A):\n", A_reconstructed)
